@@ -14,6 +14,11 @@ function auth(req, res, next) {
         return next();
     }
 
+    // DEV_SKIP_AUTH: skip JWT verification when JWT_SECRET is not set
+    if (!process.env.JWT_SECRET) {
+        return next();
+    }
+
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
