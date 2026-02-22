@@ -10,7 +10,7 @@ const aiRoutes = require("./routes/ai.routes");
 const healthRoutes = require("./routes/health.routes");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5003;
 
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(auth);
