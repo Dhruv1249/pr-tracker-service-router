@@ -6,6 +6,12 @@ const PUBLIC_ROUTES = [
     "/api/auth/github/callback",
     "/api/health",
     "/api/webhooks/github",
+    // Internal service-to-service routes (data service, AI)
+    "/api/repositories",
+    "/api/pullrequests",
+    "/api/reviews",
+    "/api/db/users",
+    "/api/ai/",
 ];
 
 function auth(req, res, next) {

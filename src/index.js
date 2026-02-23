@@ -7,6 +7,7 @@ const auth = require("./middleware/auth");
 const authRoutes = require("./routes/auth.routes");
 const coreRoutes = require("./routes/core.routes");
 const aiRoutes = require("./routes/ai.routes");
+const dbRoutes = require("./routes/db.routes");
 const healthRoutes = require("./routes/health.routes");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(auth);
 
 app.use(healthRoutes);
 app.use(authRoutes);
+app.use(dbRoutes);
 app.use(coreRoutes);
 app.use(aiRoutes);
 
@@ -33,5 +35,6 @@ app.listen(PORT, () => {
     console.log(`\n  API Gateway running on http://localhost:${PORT}`);
     console.log(`  Auth Service   → ${process.env.AUTH_SERVICE_URL}`);
     console.log(`  Core Service   → ${process.env.CORE_SERVICE_URL}`);
-    console.log(`  AI Service     → ${process.env.AI_SERVICE_URL}\n`);
+    console.log(`  AI Service     → ${process.env.AI_SERVICE_URL}`);
+    console.log(`  DB Service     → ${process.env.DB_SERVICE_URL}\n`);
 });
