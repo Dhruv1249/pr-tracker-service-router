@@ -4,32 +4,45 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const router = Router();
 const AI_SERVICE = process.env.AI_SERVICE_URL;
 
-// Analysis
-// POST /api/ai/analyze/pr/:prId  → Send PR to AI
-// GET  /api/ai/reports/pr/:prId  → Get AI analysis report
-
-// Agentic Actions
-// POST /api/ai/agent/action      → Execute allowed action
-// GET  /api/ai/agent/history     → Agent action history
+// All AI routes go to the AI agent — restore full path so the agent sees /api/ai/*
 router.use(
     "/api/ai",
-    createProxyMiddleware({ target: AI_SERVICE, changeOrigin: true })
+    createProxyMiddleware({
+        target: AI_SERVICE,
+        changeOrigin: true,
+        on: {
+            proxyReq: (proxyReq, req) => {
+                proxyReq.path = req.originalUrl;
+            },
+        },
+    })
 );
 
-// Risk
-// GET /api/risk/high        → List high-risk PRs
-// GET /api/risk/pr/:prId    → Risk details for PR
+// /api/risk and /api/security are aliases pointing to AI agent routes at /api/ai/risk and /api/ai/security
 router.use(
     "/api/risk",
-    createProxyMiddleware({ target: AI_SERVICE, changeOrigin: true })
+    createProxyMiddleware({
+        target: AI_SERVICE,
+        changeOrigin: true,
+        on: {
+            proxyReq: (proxyReq, req) => {
+                proxyReq.path = req.originalUrl.replace("/api/risk", "/api/ai/risk");
+            },
+        },
+    })
 );
 
-// Security
-// GET /api/security/alerts    → List flagged PRs
-// GET /api/security/pr/:prId  → Security report for PR
 router.use(
     "/api/security",
-    createProxyMiddleware({ target: AI_SERVICE, changeOrigin: true })
+    createProxyMiddleware({
+        target: AI_SERVICE,
+        changeOrigin: true,
+        on: {
+            proxyReq: (proxyReq, req) => {
+                proxyReq.path = req.originalUrl.replace("/api/security", "/api/ai/security");
+            },
+        },
+    })
 );
 
 module.exports = router;
