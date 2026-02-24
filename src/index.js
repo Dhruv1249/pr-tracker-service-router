@@ -9,17 +9,33 @@ const coreRoutes = require("./routes/core.routes");
 const aiRoutes = require("./routes/ai.routes");
 const dbRoutes = require("./routes/db.routes");
 const healthRoutes = require("./routes/health.routes");
+const cookieParser = require("cookie-parser");
 
 const app = express();
-const PORT = process.env.PORT || 5003;
+const PORT = process.env.PORT;
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cookieParser())
+
+app.use(cors({ 
+    origin: process.env.CLIENT_URL, 
+    credentials: true 
+}));
 app.use(auth);
 
+app.use((req,res,next)=>{
+  console.log("gateway req.user:", req.user);
+  next();
+});
+
 app.use(healthRoutes);
+
+console.log("auth routes...");
 app.use(authRoutes);
+console.log("db routes..");
 app.use(dbRoutes);
+console.log("core routes...");
 app.use(coreRoutes);
+console.log("ai routes...");
 app.use(aiRoutes);
 
 app.use("/api/*", (req, res) => {
