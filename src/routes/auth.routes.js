@@ -10,14 +10,15 @@ router.get("/api/auth/success", (req, res) => {
 
     res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "Lax",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // important: ensure cookie flushed on 5000 response
-    res.status(302).set("Location", "http://localhost:5173/dashboard").end();
+    const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.status(302).set("Location", `${clientUrl}/dashboard`).end();
 });
 
 router.post("/api/auth/logout", (req, res) => {
