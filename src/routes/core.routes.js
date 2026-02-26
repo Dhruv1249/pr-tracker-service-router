@@ -16,6 +16,11 @@ for (const prefix of corePrefixes) {
                 proxyReq: (proxyReq, req) => {
                     // Express strips the mount path from req.url, restore it
                     proxyReq.path = req.originalUrl;
+                    console.log("gateway cookie:", req.cookies?.token);
+
+                    if (req.cookies && req.cookies.token) {
+                        proxyReq.setHeader('Authorization', `Bearer ${req.cookies.token}`);
+                    }
                 },
             },
         })

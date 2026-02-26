@@ -17,13 +17,17 @@ for (const prefix of dbPrefixes) {
             on: {
                 proxyReq: (proxyReq, req) => {
                     proxyReq.path = req.originalUrl;
+                    // Forward the authenticated user's MongoDB _id to the DB service
+                    const userId = req.user?.id;
+                    if (userId) {
+                        proxyReq.setHeader("x-user-id", userId);
+                    }
                 },
             },
         })
     );
 }
 
-// /api/db/users → MongoDB service (rewrites to /api/users to avoid conflict with auth's /api/users)
 router.use(
     "/api/db/users",
     createProxyMiddleware({
@@ -31,7 +35,12 @@ router.use(
         changeOrigin: true,
         on: {
             proxyReq: (proxyReq, req) => {
-                proxyReq.path = req.originalUrl.replace("/api/db/users", "/api/users");
+                const userId = req.user?.id;
+                if (userId) {
+                    proxyReq.setHeader("x-user-id", userId);
+                }
+
+                proxyReq.path = `/api/users${req.url}`;
             },
         },
     })

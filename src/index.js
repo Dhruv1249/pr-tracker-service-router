@@ -29,19 +29,15 @@ app.use((req,res,next)=>{
 
 app.use(healthRoutes);
 
-console.log("auth routes...");
 app.use(authRoutes);
-console.log("db routes..");
 app.use(dbRoutes);
-console.log("core routes...");
 app.use(coreRoutes);
-console.log("ai routes...");
 app.use(aiRoutes);
 
 app.use("/api/*", (req, res) => {
     res.status(404).json({ error: `Route ${req.method} ${req.originalUrl} not found` });
 });
-
+    
 app.use((err, req, res, next) => {
     console.error(err.message);
     res.status(500).json({ error: "Internal server error" });
