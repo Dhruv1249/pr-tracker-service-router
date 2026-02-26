@@ -33,14 +33,15 @@ router.use(
     createProxyMiddleware({
         target: DB_SERVICE,
         changeOrigin: true,
+        pathRewrite: {
+            '^/api/db/users': '/api/users'
+        },
         on: {
             proxyReq: (proxyReq, req) => {
                 const userId = req.user?.id;
                 if (userId) {
                     proxyReq.setHeader("x-user-id", userId);
                 }
-
-                proxyReq.path = `/api/users${req.url}`;
             },
         },
     })
