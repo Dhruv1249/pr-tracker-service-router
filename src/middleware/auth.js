@@ -10,7 +10,6 @@ const PUBLIC_ROUTES = [
     // Internal service-to-service routes (data service, AI)
     "/api/pullrequests",
     "/api/reviews",
-    "/api/ai/",
     "/api/db/users/github",   // Auth service lookups by githubId
 ];
 

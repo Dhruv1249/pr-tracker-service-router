@@ -21,6 +21,9 @@ router.use(
         on: {
             proxyReq: (proxyReq, req) => {
                 proxyReq.path = req.originalUrl;
+                if (req.cookies && req.cookies.token) {
+                    proxyReq.setHeader('Authorization', `Bearer ${req.cookies.token}`);
+                }
             },
             proxyRes: stripCorsHeaders,
         },
@@ -36,6 +39,9 @@ router.use(
         on: {
             proxyReq: (proxyReq, req) => {
                 proxyReq.path = req.originalUrl.replace("/api/risk", "/api/ai/risk");
+                if (req.cookies && req.cookies.token) {
+                    proxyReq.setHeader('Authorization', `Bearer ${req.cookies.token}`);
+                }
             },
             proxyRes: stripCorsHeaders,
         },
@@ -50,6 +56,9 @@ router.use(
         on: {
             proxyReq: (proxyReq, req) => {
                 proxyReq.path = req.originalUrl.replace("/api/security", "/api/ai/security");
+                if (req.cookies && req.cookies.token) {
+                    proxyReq.setHeader('Authorization', `Bearer ${req.cookies.token}`);
+                }
             },
             proxyRes: stripCorsHeaders,
         },
