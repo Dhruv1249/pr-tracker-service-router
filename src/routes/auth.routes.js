@@ -18,7 +18,8 @@ router.get("/api/auth/success", (req, res) => {
 
     const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
     res.set("Cache-Control", "no-store, no-cache, must-revalidate");
-    res.status(302).set("Location", `${clientUrl}/dashboard`).end();
+    // Token in hash so client can store in localStorage (works even when 3rd-party cookies are blocked)
+    res.status(302).set("Location", `${clientUrl}/auth/callback#token=${token}`).end();
 });
 
 router.post("/api/auth/logout", (req, res) => {
