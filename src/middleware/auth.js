@@ -11,7 +11,7 @@ const PUBLIC_ROUTES = [
     "/api/pullrequests",
     "/api/reviews",
     "/api/ai/",
-    // "/api/db/users"
+    "/api/db/users"
 ];
 
 function auth(req, res, next) {
