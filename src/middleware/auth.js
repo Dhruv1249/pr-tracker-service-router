@@ -11,7 +11,7 @@ const PUBLIC_ROUTES = [
     "/api/pullrequests",
     "/api/reviews",
     "/api/ai/",
-    "/api/db/users"
+    "/api/db/users/github",   // Auth service lookups by githubId
 ];
 
 function auth(req, res, next) {
@@ -21,6 +21,11 @@ function auth(req, res, next) {
     }
 
     if (PUBLIC_ROUTES.some(route => req.originalUrl.startsWith(route))) {
+        return next();
+    }
+
+    // Allow user creation from auth service (internal, not browser-originated)
+    if (req.originalUrl === "/api/db/users" && req.method === "POST") {
         return next();
     }
 

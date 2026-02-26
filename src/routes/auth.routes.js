@@ -8,10 +8,9 @@ const AUTH_SERVICE = process.env.AUTH_SERVICE_URL;
 router.get("/api/auth/success", (req, res) => {
     const token = req.query.token;
 
-    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
         httpOnly: true,
-        secure: isProduction,
+        secure: true,
         sameSite: "None",
         path: "/",
         maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -23,11 +22,10 @@ router.get("/api/auth/success", (req, res) => {
 });
 
 router.post("/api/auth/logout", (req, res) => {
-    const isProduction = process.env.NODE_ENV === "production";
     res.clearCookie("token", {
         path: "/",
-        sameSite: "None" ,
-        secure: isProduction,
+        sameSite: "None",
+        secure: true,
         httpOnly: true
     });
     res.status(200).json({ success: true, message: "Logged out successfully" });
